@@ -1,0 +1,56 @@
+name: event_stereo
+num_gpu: 1  # set num_gpu: 0 for cpu mode
+manual_seed: 8
+use_full_gt: true
+
+datasets:
+  indoor_flying_dataroot: /mvsec/indoor_flying
+  split_number: 1
+  time_horizon: 0.5
+  slow_split: 1
+  fast_split: 3
+
+  # data loader
+  num_worker_per_gpu: 4
+  batch_size_per_gpu: 1
+  prefetch_mode: ~
+
+# path
+path:
+  pretrain_network_g: ~
+  strict_load_g: true
+  resume_state: ~
+
+pretrain_cnn_network: ~
+
+# training settings
+train:
+  network:
+    type: StereoSpikeWithEdgeBinaryAndImage
+  optim:
+    type: Adam
+    lr: !!float 2e-4
+    weight_decay: 0
+    betas: [0.9, 0.99]
+
+  scheduler:
+    type: MultiStepLR
+    milestones: [8, 42, 60]
+    gamma: 0.5
+
+  # losses
+  pixel_opt:
+    type: Total_Loss
+    alpha: 0.5
+  mask_opt:
+    type: MaskLoss_CE_All_binary
+    loss_weight: 0.75
+  image_opt:
+    type: StyleLoss_vgg11
+    loss_weight: 1.0
+
+  total_epochs: 70
+
+# logging settings
+logger:
+  print_freq: 1000
