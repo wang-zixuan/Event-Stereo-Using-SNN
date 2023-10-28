@@ -27,7 +27,7 @@ from data.transformers import init_transformers
 def parse_options(is_train=True):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '-opt', type=str, default='options/train_unsupervised_spikingjelly.yml', help='Path to option YAML file.')
+        '-opt', type=str, default='options/train_spikingjelly.yml', help='Path to option YAML file.')
 
     args = parser.parse_args()
     opt = parse(args.opt, is_train=is_train)
