@@ -296,7 +296,6 @@ class StereoSpike(NeuromorphicNet):
         out_rconv = self.bottleneck(out_conv4)
         flops += 1.0 * (512 * 3 * 3 - 1) * 17 * 22 * 512 * torch.sum(out_conv4) / out_conv4.numel() + out_rconv.numel()
 
-        # -------------------------------- deconv4
         out_deconv4 = self.deconv4(out_rconv)[0]
         flops += 1.0 * (512 * 3 * 3 - 1) * 33 * 44 * 256 * torch.sum(out_rconv) / out_rconv.numel() + out_deconv4.numel()
 
@@ -309,7 +308,6 @@ class StereoSpike(NeuromorphicNet):
         depth4_weight = self.predict_depth4(out_add4)
         self.Ineurons(depth4_weight)
         
-        # -------------------------------- deconv3
         out_deconv3 = self.deconv3(out_add4)[0]
         flops += 1.0 * (256 * 3 * 3 - 1) * 65 * 87 * 128 * torch.sum(out_deconv4) / out_deconv4.numel() + out_deconv3.numel()
 
@@ -323,7 +321,6 @@ class StereoSpike(NeuromorphicNet):
         # accumulating potential
         flops += 260 * 346
 
-        # -------------------------------- deconv2
         out_deconv2 = self.deconv2(out_add3)[0]
         flops += 1.0 * (128 * 3 * 3 - 1) * 130 * 173 * 64 * torch.sum(out_deconv3) / out_deconv3.numel() + out_deconv2.numel()
         
@@ -337,7 +334,6 @@ class StereoSpike(NeuromorphicNet):
         # accumulating potential
         flops += 260 * 346
 
-        # -------------------------------- deconv1
         out_deconv1 = self.deconv1(out_add2)[0]
         flops += 1.0 * (64 * 3 * 3 - 1) * 260 * 346 * 32 * torch.sum(out_deconv2) / out_deconv2.numel() + out_deconv1.numel()
 
