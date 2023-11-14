@@ -121,7 +121,6 @@ def main():
             colormap='jet',
         )
 
-        # 估计出的disparity image，是否考虑到gt的inf的情况
         save_matrix(
             filename=f'no_inf_{split_number}_{frame_index}.png',
             matrix=output,
