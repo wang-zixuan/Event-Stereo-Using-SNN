@@ -474,32 +474,6 @@ class MaskLoss_CE_All_binary(nn.Module):
 
         return self.loss_weight * loss
 
-
-class MaskLoss_CE_All_binary_5(nn.Module):
-    def __init__(self, loss_weight=1.0):
-        super(MaskLoss_CE_All_binary_5, self).__init__()
-        self.sigmoid = torch.nn.Sigmoid()
-        self.loss_weight = loss_weight
-
-    def forward(self, predicted_mask, gt_mask, depth_image):
-        loss = 0
-        mask = ~torch.isnan(depth_image)
-        n = torch.sum(mask != False)
-        gt_mask = gt_mask[mask]
-
-        points_have_edge_sum = torch.sum(gt_mask)
-        pos_weight = (n - points_have_edge_sum) / points_have_edge_sum
-
-        for pred in predicted_mask:
-            pred = pred[mask]
-            pred[pred == 1] = 5
-            pred[pred == 0] = -5
-
-            loss += torch.sum(pos_weight * gt_mask * (-torch.log(self.sigmoid(pred))) + (1 - gt_mask) * (-torch.log(1 - self.sigmoid(pred)))) / n
-
-        return self.loss_weight * loss
-
-
 class MaskLoss_CE_All_binary_weight(nn.Module):
     def __init__(self, loss_weight=1.0):
         super(MaskLoss_CE_All_binary_weight, self).__init__()
